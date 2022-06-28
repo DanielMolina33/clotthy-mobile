@@ -19,7 +19,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     // final provider = Provider.of<LoginProvider>(context);
     LocalStorage storage = LocalStorage('userLogged');
-    var userData = storage.getItem('user_data');
+    // var userData = storage.getItem('user_data');
     var _solicitud = ['Cc', 'Ti', 'Nit'];
     String _vista = 'Doc';
 
@@ -38,7 +38,7 @@ class _ProfileState extends State<Profile> {
                 Container(
                     margin: const EdgeInsets.only(top: 30, left: 30),
                     child: Text(
-                        'Perfil de ' + userData['user']['username'].toString(),
+                        'Perfil',
                         style: const TextStyle(
                           fontSize: 20,
                           fontFamily: 'rlight',
@@ -46,11 +46,12 @@ class _ProfileState extends State<Profile> {
                 // imagen
                 Container(
                   margin: const EdgeInsets.only(top: 30, left: 30),
-                  child: Image.network(
-                    userData['user']['avatar'].toString(),
-                    width: 120,
-                    height: 110,
-                  ),
+                  child: null,
+                  // Image.network(
+                  //   userData['user']['avatar'].toString(),
+                  //   width: 120,
+                  //   height: 110,
+                  // ),
                   decoration: BoxDecoration(
                     border: Border.all(
                         color: const Color.fromARGB(66, 20, 17, 17), width: 1),
