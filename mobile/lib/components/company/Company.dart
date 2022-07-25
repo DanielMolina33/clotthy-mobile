@@ -8,6 +8,7 @@ import '../../providers/CompanyProvider.dart';
 // Components
 import '../appBar/appBar.dart';
 import '../button/Button.dart';
+import './AddCompany.dart';
 import 'EditCompany.dart';
 
 class Company extends StatefulWidget {
@@ -51,11 +52,11 @@ class _CompanyState extends State<Company> {
                     style: TextStyle(
                       fontSize: 20,
                     ),
-                  ),
+                  ),                
                   const SizedBox(height: 3),
-                  Text('Sin Datos'),
-                  const SizedBox(height: 3),
-                  Text(e.nitempresa!),
+									e.nitempresa!.isEmpty
+									? const Text("Sin datos")
+                  : Text("Nit #${e.nitempresa!}"),
                   const Divider(
                     indent: 3.5,
                   ),
@@ -65,27 +66,14 @@ class _CompanyState extends State<Company> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                          onPressed: () {
-                            // setState(() {
-                            //   infoEmpresa(e, provider);
-                            // });
-                          },
-                          icon: const Icon(
-                            FontAwesomeIcons.list,
-                            color: Color.fromARGB(255, 36, 91, 189),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => {},
-                          icon: Icon(
-                            FontAwesomeIcons.plus,
-                            color: Color.fromARGB(255, 36, 91, 189),
-                          ),
-                        ),
-                        IconButton(
                             onPressed: () => {
-                                  // provider.getCompany(context, e.id)
-                                },
+                                Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => EditCompany(e.id!)))
+                                  .then((value) => setState((){
+                                    Provider.of<CompanyProvider>(context, listen: false).getCompanies(context);
+                                  },)
+                                ),
+                              },
                             icon: Icon(
                               FontAwesomeIcons.penToSquare,
                               color: Color.fromARGB(255, 36, 91, 189),
@@ -126,12 +114,12 @@ class _CompanyState extends State<Company> {
                                 backgroundColor: MaterialStateProperty.all<Color>(
                                     Color.fromARGB(255, 36, 91, 189))),
                             onPressed: () {
-                              // print("pepe");
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => AddCompany()))
-                              // provider.getCompany(context);
+                              Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => const AddCompany()))
+                                .then((value) => setState((){
+																	Provider.of<CompanyProvider>(context, listen: false).getCompanies(context);
+																},)
+                              );
                             },
                             child: const Icon(FontAwesomeIcons.plus)
                           )
@@ -139,166 +127,46 @@ class _CompanyState extends State<Company> {
                       )
                     ),
               SizedBox(
-                height: size.height * 0.6,
+                height: size.height * 0.65,
                 child: ListView(
                   padding: const EdgeInsets.all(20),
                   children: itemMap,
                 ),
               ),
-              const SizedBox(height: 30),
-              Container(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      highlightColor: const Color.fromARGB(255, 36, 91, 189),
-                      onPressed: () {},
-                      icon: const Icon(
-                        FontAwesomeIcons.arrowLeft,
-                        color: Colors.black,
-                        size: 30,
-                      ),                      
-                    ),
-                   const SizedBox(width: 40),
-                    IconButton(
-                      highlightColor:const Color.fromARGB(255, 36, 91, 189),
-                      onPressed: () {},
-                      icon: const Icon(
-                        FontAwesomeIcons.arrowRight,
-                        color: Colors.black,
-                        size: 30,
-                      ),                      
-                    ),
-                  ]
-                )
-              )
+              // const SizedBox(height: 30),
+              // Container(
+              //   width: double.infinity,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       IconButton(
+              //         highlightColor: const Color.fromARGB(255, 36, 91, 189),
+              //         onPressed: () {},
+              //         icon: const Icon(
+              //           FontAwesomeIcons.arrowLeft,
+              //           color: Colors.black,
+              //           size: 30,
+              //         ),                      
+              //       ),
+              //      const SizedBox(width: 40),
+              //       IconButton(
+              //         highlightColor:const Color.fromARGB(255, 36, 91, 189),
+              //         onPressed: () {},
+              //         icon: const Icon(
+              //           FontAwesomeIcons.arrowRight,
+              //           color: Colors.black,
+              //           size: 30,
+              //         ),                      
+              //       ),
+              //     ]
+              //   )
+              // )
             ],
           ),
         ),
       ),
     );
   }
-
-  // Future<String?> socialNet(
-  //     BuildContext context, Compani e, CompanyProvider provider) {
-  //   Provider.of<CompanyProvider>(context, listen: false).getCompanyNet(e.id!);
-  //   Provider.of<CompanyProvider>(context, listen: false).getCompanytel(e.id!);
-
-  //   return showDialog<String>(
-  //       context: context,
-  //       builder: (BuildContext context) => AlertDialog(
-  //             title: Text('Redes sociales'),
-  //             content: Container(
-  //               height: 250,
-  //               child: ListView(
-  //                 children: [
-  //                   ListTile(
-  //                     title: Text('facebook'),
-  //                     subtitle: (provider.isRed)
-  //                         ? (provider.socialNetworks[1].nombrered ==
-  //                                 "Instagram")
-  //                             ? Text(
-  //                                 provider.socialNetworks[0].enlacered!,
-  //                                 style: TextStyle(fontSize: 13),
-  //                               )
-  //                             : Text('Sin Datos')
-  //                         : Text('sin datos'),
-  //                     leading:
-  //                         Icon(FontAwesomeIcons.facebook, color: Colors.blue),
-  //                   ),
-  //                   ListTile(
-  //                     title: Text('Instagrim'),
-  //                     subtitle: (provider.isRed)
-  //                         ? (provider.socialNetworks[1].nombrered ==
-  //                                 "Instagram")
-  //                             ? Text(
-  //                                 provider.socialNetworks[1].enlacered!,
-  //                                 style: TextStyle(fontSize: 13),
-  //                               )
-  //                             : Text('Sin Datos')
-  //                         : Text('sin datos'),
-  //                     leading: Icon(
-  //                       FontAwesomeIcons.instagram,
-  //                       color: Colors.red,
-  //                     ),
-  //                   ),
-  //                   ListTile(
-  //                     title: Text('Whatsapp'),
-  //                     subtitle: (provider.isTelefono)
-  //                         ? Text(provider.telefono[0].numerotelefono!)
-  //                         : Text('Sin Datos'),
-  //                     leading: const Icon(
-  //                       FontAwesomeIcons.whatsapp,
-  //                       color: Colors.green,
-  //                     ),
-  //                   ),
-  //                   ElevatedButton(
-  //                       style: ButtonStyle(
-  //                           backgroundColor: MaterialStateProperty.all<Color>(
-  //                               Color.fromARGB(255, 36, 91, 189))),
-  //                       onPressed: () {
-  //                         Navigator.pop(context);
-  //                       },
-  //                       child: const Text('ok'))
-  //                 ],
-  //               ),
-  //             ),
-  //           ));
-  // }
-
-  // infoEmpresa(Compan e, CompanyProvider provider) {
-  //   Provider.of<CompanyProvider>(context, listen: false).getCompanytel(e.id!);
-
-  //   return showDialog<String>(
-  //     context: context,
-  //     builder: (BuildContext context) => AlertDialog(
-  //       backgroundColor: Colors.white,
-  //       title: Text(e.nombreempresa!),
-  //       content: Container(
-  //         width: 250,
-  //         height: 280,
-  //         child: ListView(
-  //           children: [
-  //             ListTile(
-  //               title: Text('Fecha creacion'),
-  //               subtitle: Text(e.fechacreacion!),
-  //               trailing: const Icon(
-  //                 FontAwesomeIcons.paperPlane,
-  //                 color: Color.fromARGB(255, 36, 91, 189),
-  //               ),
-  //             ),
-  //             ListTile(
-  //                 title: Text('Telefono'),
-  //                 subtitle: (provider.isTelefono)
-  //                     ? Text(provider.telefono[0].numerotelefono!)
-  //                     : Text('Sin Datos'),
-  //                 trailing: const Icon(
-  //                   FontAwesomeIcons.phone,
-  //                   color: Color.fromARGB(255, 36, 91, 189),
-  //                 )),
-  //             ListTile(
-  //               title: Text('Nit'),
-  //               subtitle: Text(e.nitempresa!),
-  //               trailing: const Icon(
-  //                 FontAwesomeIcons.hashtag,
-  //                 color: Color.fromARGB(255, 36, 91, 189),
-  //               ),
-  //             ),
-  //             ElevatedButton(
-  //                 style: ButtonStyle(
-  //                     backgroundColor: MaterialStateProperty.all<Color>(
-  //                         Color.fromARGB(255, 36, 91, 189))),
-  //                 onPressed: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: const Text('ok'))
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
 
 class Loading extends StatelessWidget {

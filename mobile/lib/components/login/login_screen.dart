@@ -2,15 +2,13 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import "package:provider/provider.dart";
-
 import '../../providers/LoginProvider.dart';
 import '../../providers/login_form_provider.dart';
-import '../UI/input_decorations.dart';
-import '../modal/Modal.dart';
-import '../widgets/auth_background.dart';
-import '../widgets/card_container.dart';
 
 // Components
+import '../widgets/auth_background.dart';
+import '../widgets/card_container.dart';
+import '../UI/input_decorations.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -82,6 +80,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginForm extends State<LoginForm> {
   bool isHidden = true;
+  bool isLogging = false;
+
   @override
   Widget build(BuildContext context) {
     final loginform = Provider.of<LoginFormProvider>(context);
@@ -174,12 +174,19 @@ class _LoginForm extends State<LoginForm> {
                     child: Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-                      child: Text(
-                        "Ingresar",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
+                      child: !isLogging
+                      ? const Text(
+                          "Ingresar",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        )
+                      : const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator()
+                        )
                     ),
                     onPressed: () {
+                      setState(() => isLogging = true,);
                       // todo login form
                       String sinspa = loginform.email.replaceAll(" ", "");
                       if(loginform.isValidForm()) {
@@ -187,7 +194,13 @@ class _LoginForm extends State<LoginForm> {
                           "email": loginform.email,
                           "password": loginform.password,
                           "password_confirmation": loginform.password
-                        }, context);
+                        }, context).then((value) => {
+                          if(value){
+                            Navigator.pushReplacementNamed(context, 'Company'),
+                          } else {
+                            setState(() => isLogging = false,)
+                          }
+                        });
                       }
                     }),
                 duration: Duration(seconds: 3)),

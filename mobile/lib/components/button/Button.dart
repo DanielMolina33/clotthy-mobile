@@ -34,23 +34,23 @@ class ButtonDesp extends StatelessWidget {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const Company()))
                 }),
-        SpeedDialChild(
-            backgroundColor: Color.fromARGB(255, 36, 91, 189),
-            child: const Icon(FontAwesomeIcons.user, color: Colors.white),
-            onTap: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Profile()))
-                }),
-        SpeedDialChild(
-            backgroundColor: Color.fromARGB(255, 36, 91, 189),
-            child: Icon(
-              FontAwesomeIcons.question,
-              color: Colors.white,
-            ),
-            onTap: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Pqrsf()))
-                }),
+        // SpeedDialChild(
+        //     backgroundColor: Color.fromARGB(255, 36, 91, 189),
+        //     child: const Icon(FontAwesomeIcons.user, color: Colors.white),
+        //     onTap: () => {
+        //           Navigator.push(context,
+        //               MaterialPageRoute(builder: (context) => Profile()))
+        //         }),
+        // SpeedDialChild(
+        //     backgroundColor: Color.fromARGB(255, 36, 91, 189),
+        //     child: Icon(
+        //       FontAwesomeIcons.question,
+        //       color: Colors.white,
+        //     ),
+        //     onTap: () => {
+        //           Navigator.push(context,
+        //               MaterialPageRoute(builder: (context) => const Pqrsf()))
+        //         }),
         SpeedDialChild(
             backgroundColor: Color.fromARGB(255, 36, 91, 189),
             child: Icon(FontAwesomeIcons.arrowRightFromBracket,

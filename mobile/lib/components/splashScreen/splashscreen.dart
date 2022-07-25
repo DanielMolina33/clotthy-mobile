@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:video_player/video_player.dart';
@@ -17,9 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.asset(
-      'assets/images/logosplash.mp4',
-    )
+    _controller = VideoPlayerController.asset('assets/images/logosplash.mp4')
       ..initialize().then((_) {
         setState(() {});
       })
@@ -33,9 +33,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
     await Future.delayed(const Duration(seconds: 4));
     if (storage.getItem('user_logged') == null) {
-      Navigator.pushNamed(context, 'login');
+      Navigator.pushReplacementNamed(context, 'login');
     } else {
-      Navigator.pushNamed(context, 'Company');
+      Navigator.pushReplacementNamed(context, 'Company');
     }
   }
 

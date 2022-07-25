@@ -28,7 +28,7 @@ class Modal extends StatelessWidget {
       elevation: 24.0,
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context, 'Aceptar'),
+          onPressed: () => Navigator.pop(context, true),
           child: const Text('Aceptar'),
         ),
       ],

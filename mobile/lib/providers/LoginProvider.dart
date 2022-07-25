@@ -13,7 +13,7 @@ class LoginProvider extends ChangeNotifier {
   final LocalStorage storage = LocalStorage('session');
   final List<String> requiredRoles = ["administrador general", "superuser"];
 
-  signin(Map<String, String> data, context) async {
+  Future<bool> signin(Map<String, String> data, context) async {
     String path = '/signin/employees';
     final res = await Api.httpPost(path, data);
     Map<String, dynamic> dataMap = jsonDecode(res.body);
@@ -29,8 +29,9 @@ class LoginProvider extends ChangeNotifier {
             'token': user.token,
             'created_at': DateTime.now().toString()
           });
-
-          Navigator.pushReplacementNamed(context, 'Company');
+          
+          return true;
+          // Navigator.pushReplacementNamed(context, 'Company');
         } else {
           showModal(
             "No tienes el rol requerido para ingresar \n" 
@@ -45,6 +46,8 @@ class LoginProvider extends ChangeNotifier {
       final apiMessages = ApiMessages();
       apiMessages.getMessages(dataMap, context);
     }
+
+    return false;
   }
 
   logout(token, context, redirect) async {

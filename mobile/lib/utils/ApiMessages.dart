@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ApiMessages {
   // final msg = new MessagesModales();
   
-  void getMessages(data, context) {
+  void getMessages(data, context, {redirect=false}) {
     final messages = data['message'];
     String message = "";
 	
@@ -21,18 +21,37 @@ class ApiMessages {
           message = message.replaceAll("Unauthenticated.", "Vuelve a iniciar sesion");
         }
       }
-      
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Modal(
-            title: "Advertencia", 
-            textContent: message, 
-            icon: Icons.warning_amber_rounded,
-            iconColor: Colors.orange
-          );
-        }
-      );
+
+      if(!redirect){
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Modal(
+              title: "Advertencia", 
+              textContent: message, 
+              icon: Icons.warning_amber_rounded,
+              iconColor: Colors.orange
+            );
+          }
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Modal(
+              title: "Advertencia", 
+              textContent: message, 
+              icon: Icons.warning_amber_rounded,
+              iconColor: Colors.orange
+            );
+          }
+        ).then((value) => {
+          if(value){
+            FocusManager.instance.primaryFocus?.unfocus(),
+            Navigator.pop(context)
+          }
+        });
+      }
     }
   }
 }

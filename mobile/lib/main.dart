@@ -1,4 +1,5 @@
 // Flutter
+import 'package:clotthy/providers/LocationsProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clotthy/providers/LoginProvider.dart';
@@ -27,9 +28,9 @@ class AppState extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(lazy: false, create: (_) => LoginProvider()),
         ChangeNotifierProvider(lazy: false, create: (_) => CompanyProvider()),
-        // ChangeNotifierProvider(lazy: false, create: (_) => LogoutProvider()),
+        ChangeNotifierProvider(lazy: false, create: (_) => LocationsProvider()),
       ],
-      child: Clotthy(),
+      child: const Clotthy(),
     );
   }
 }
@@ -47,7 +48,6 @@ class Clotthy extends StatelessWidget {
         "SplashScreen": (_) => const SplashScreen(),
         "login": (_) => const LoginScreen(),
         "Company": (_) => const Company(),
-        "EditCompany": (_) => EditCompany(),
       },
     );
   }

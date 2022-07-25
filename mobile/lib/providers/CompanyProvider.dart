@@ -9,20 +9,16 @@ import 'package:provider/provider.dart';
 import 'package:clotthy/utils/Api.dart';
 
 import '../components/modal/Modal.dart';
+import '../models/CompanyDetailModel.dart';
 import '../utils/ApiMessages.dart';
 
 class CompanyProvider extends ChangeNotifier {
   LocalStorage storage = LocalStorage('session');
-  List<Data>? companies = [];
-  // List<Telefono> telefono = [];
-  // List<SocialNetwork> socialNetworks = [];
-  // List<OneCompani> oneCompany = [];
+  List<dynamic>? companies = [];
+  DataDetail? company;
 
-  // bool isTelefono = false;
-  // bool isRed = false;
-  // bool isCompany = false;
-
-  getCompanies(context) async {
+  void getCompanies(context) async {
+    companies = [];
     String path = '/company';
     final res = await Api.httpGet(path, "");
     final statusCode = res.statusCode;
@@ -31,7 +27,8 @@ class CompanyProvider extends ChangeNotifier {
     if(statusCode == 200){
       final companyData = CompanyModel.fromJson(dataMap);
       if(companyData.data!.data != null){
-        companies = companyData.data!.data;
+        final companiesReverse = List.from(companyData.data!.data!.reversed);
+        companies = companiesReverse;
       } else {
         showDialog(
           context: context,
@@ -51,80 +48,69 @@ class CompanyProvider extends ChangeNotifier {
     }
 
     notifyListeners();
-
-    // print(bodyResponse);
-
-    // String message = "";
   }
 
-  // getCompanytel(String id) async {
-  //   // print('********************');
-  //   LocalStorage storage = LocalStorage('userLogged');
-  //   String url = '/company/$id';
-  //   var userData = storage.getItem('user_data');
-  //   final token = userData['token'];
+  Future<DataDetail?> getCompany(context, id) async {
+    company = null;
+    String path = "/company/$id";
+    final res = await Api.httpGet(path, "");
+    final statusCode = res.statusCode;
+    Map<String, dynamic> dataMap = jsonDecode(res.body);
 
-  //   // conexion a all api contando los documentos
-  //   final resp = await AllApi.httpGet(url, token);
-  //   final bodyResponse = jsonDecode(resp.body);
+    if(statusCode == 200){
+      final companyData = CompanyDetailModel.fromJson(dataMap);
+      if(companyData.data != null){
+        return companyData.data;
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Modal(
+              title: "Advertencia", 
+              textContent: "Hubo un problema al cargar las empresas\nintentalo de nuevo", 
+              icon: Icons.warning_amber_rounded,
+              iconColor: Colors.orange
+            );
+          }
+        );
+      }
+    } else if (statusCode == 400){
+      final apiMessages = ApiMessages();
+      apiMessages.getMessages(dataMap, context);
+    }
 
-  //   // print(bodyResponse);
-  //   final Telefonos telefono =
-  //       Telefonos.fromlist(bodyResponse['data']['telefonos']);
-  //   this.telefono = telefono.dato;
-  //   if (telefono.dato[0].id != "") {
-  //     isTelefono = true;
-  //   }
+    return null;
+  }
 
-  //   notifyListeners();
-  //   // String message = "";
-  // }
+  void createCompany(Map<String, String> data, token, context) async {
+    String path = '/company';
+    final res = await Api.httpMultipart(path, data, data['image'], token);
+    final statusCode = res.statusCode;
+    Map<String, dynamic> dataMap = jsonDecode(res.body);
 
-  // getCompanyNet(String id) async {
-  //   // print('********************');
-  //   LocalStorage storage = LocalStorage('userLogged');
-  //   String url = '/company/$id';
-  //   var userData = storage.getItem('user_data');
-  //   final token = userData['token'];
+    if(dataMap.isNotEmpty){
+      final apiMessages = ApiMessages();
+      if(statusCode == 201){
+        apiMessages.getMessages(dataMap, context, redirect: true);
+      } else {
+        apiMessages.getMessages(dataMap, context);
+      }
+    }
+  }
 
-  //   // conexion a all api contando los documentos
-  //   final resp = await AllApi.httpGet(url, token);
-  //   final bodyResponse = jsonDecode(resp.body);
+  void editCompany(Map<String, String> data, id, token, context) async {
+    String path = "/company/$id";
+    final res = await Api.httpPutMultipart(path, data, data['image'], token);
+    final statusCode = res.statusCode;
+    Map<String, dynamic> dataMap = jsonDecode(res.body);
 
-  //   print('**************  ' + bodyResponse.toString());
-  //   final SocialNetworks socialNetworks =
-  //       SocialNetworks.fromlist(bodyResponse['data']['redessociales']);
-
-  //   this.socialNetworks = socialNetworks.dato;
-  //   print(socialNetworks.dato);
-  //   if (socialNetworks.dato != "") {
-  //     isRed = true;
-  //   }
-  //   // print(socialNetworks.dato);
-  //   notifyListeners();
-  //   // String message = "";
-  // }
-
-  // getCompany(context, id) async {
-  //   LocalStorage storage = LocalStorage('userLogged');
-  //   String url = '/company/$id';
-  //   var userData = storage.getItem('user_data');
-  //   final token = userData['token'];
-
-  //   // conexion a all api contando los documentos
-  //   final resp = await AllApi.httpGet(url, token);
-  //   final bodyResponse = jsonDecode(resp.body);
-
-  //   print('**************  ' + bodyResponse.toString());
-
-  //   final OneCompany oneCompany = OneCompany.fromlist(bodyResponse['data']);
-  //   this.oneCompany = oneCompany.dato;
-  //   print(oneCompany.dato);
-  //   if (oneCompany.dato != "") {
-  //     isCompany = true;
-  //     Navigator.pushReplacementNamed(context, "EditCompany");
-  //   }
-
-  //   notifyListeners();
-  // }
+    if(dataMap.isNotEmpty){
+      final apiMessages = ApiMessages();
+      if(statusCode == 200){
+        apiMessages.getMessages(dataMap, context, redirect: true);
+      } else {
+        apiMessages.getMessages(dataMap, context);
+      }
+    }
+  }
 }
